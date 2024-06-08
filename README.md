@@ -1,6 +1,8 @@
 # RSECon22 Walkthrough: A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows
 
-This repo contains the material for the RSECon22 walkthrough titled: [*"A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows"*](https://virtual.oxfordabstracts.com/#/event/public/3101/submission/113). The walkthrough uses a docker container and Jupyter Labs (formally, a notebook) to run through an example usage of the [FAIR Data Pipeline](https://www.fairdatapipeline.org/). You can view the walkthrough presentation in the [Society of Research Software Engineering channel](https://www.youtube.com/watch?v=IZWpmIOhuz0).
+This repo contains an up to date fork of the material used for RSECon22 walkthrough titled: [*"A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows"*](https://virtual.oxfordabstracts.com/#/event/public/3101/submission/113). The walkthrough uses a docker container and Jupyter Labs (formally, a notebook) to run through an example usage of the [FAIR Data Pipeline](https://www.fairdatapipeline.org/). You can view the walkthrough presentation in the [Society of Research Software Engineering channel](https://www.youtube.com/watch?v=IZWpmIOhuz0).
+
+It is meant to be used as a tutorial
 
 ## Prerequisites
 The only prerequisite is an installation of Docker, which is available free from [docker.com](https://www.docker.com/).
@@ -10,24 +12,13 @@ The docker container is available on the GitHub Package Registry and can be pull
 
 ### AMD64
 ```
-docker pull ghcr.io/fairdatapipeline/rsecon:latest
-```
-
-### ARM64
-```
-docker pull ghcr.io/fairdatapipeline/rsecon:aarm64
+docker pull ghcr.io/fairdatapipeline/fdptutorial:latest
 ```
 
 The container can then be run using the following command:
 
 ```
-docker run -p 8000:8000 -p 8888:8888 ghcr.io/fairdatapipeline/rsecon:latest
-```
-
-OR
-
-```
-docker run -p 8000:8000 -p 8888:8888 ghcr.io/fairdatapipeline/rsecon:aarm64
+docker run -p 8000:8000 -p 8888:8888 ghcr.io/fairdatapipeline/fdptutorial:latest
 ```
 
 Once the container has started, there will be an address to access the Jupyter Lab within the console. This address will include a token for authentication to the Jupyter Labs page. The link will take the form of: `http://127.0.0.1:8888/lab?token=<token>`.

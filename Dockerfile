@@ -21,7 +21,8 @@ RUN apt update && \
     libjsoncpp-dev \
     curl \
     libcurl4-openssl-dev \
-    libyaml-cpp-dev 
+    libyaml-cpp-dev  \
+    imagemagick
 
 # Java
 RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
@@ -33,8 +34,8 @@ RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
 
 # Python Dependencies
 WORKDIR ${USER_HOME}/temp
-RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml && \
-    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock && \
+RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/main/pyproject.toml && \
+    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/main/poetry.lock && \
     mamba install --quiet --yes 'poetry' && \
     mamba clean --all -f -y
 RUN poetry config virtualenvs.create false \
@@ -69,8 +70,7 @@ RUN git checkout updated-deps && \
 
 # Java Data Pipeline
 WORKDIR "${USER_HOME}/javaDataPipeline"
-RUN git checkout ro-crate-fix && \
-    gradle clean && \
+RUN gradle clean && \
     gradle build
 
 # Java Simple Model
@@ -80,20 +80,30 @@ RUN git checkout local_deps && \
     gradle build
 
 # R Simple Model
-WORKDIR ${USER_HOME}/rSimpleModel
+WORKDIR ${USER_HOME}/temp
 RUN conda config --add channels pcgr && \
+    conda config --add channels anaconda && \
     conda config --add channels bioconda && \
     mamba install --quiet --yes \
+    'pkg-config' \
+    'libcurl' \
     'poppler' \
     'librsvg' \
     'glib' \
-    'bioconductor-rhdf5' \
-    'r-rsvg' \
-    'r-magick' \
-    'r-pdftools' \
+    'libgit2' \
     && \
     mamba clean --all -f -y
-RUN R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
+RUN wget https://imagemagick.org/archive/ImageMagick.tar.gz && \
+    tar xvzf ImageMagick.tar.gz && \
+    cd ImageMagick-* && \
+    ./configure --prefix=/opt/conda && \
+    make && \
+    make install
+WORKDIR ${USER_HOME}/rSimpleModel
+RUN echo 'options(stringsAsFactors = FALSE)' >> /opt/conda/lib/R/etc/Rprofile.site && \
+    R -e 'install.packages("magick", lib ="/opt/conda/lib/R/library", repos="https://cloud.r-project.org/", configure.vars="INCLUDE_DIR=/opt/conda/include/ImageMagick-7")' && \
+    R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local("/home/jovyan/rDataPipeline") ) )' && \
+    R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
 
 WORKDIR ${USER_HOME}
 COPY ./Notebooks .
