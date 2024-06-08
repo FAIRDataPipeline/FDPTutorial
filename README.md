@@ -1,4 +1,4 @@
-# RSECon22 Walkthrough: A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows
+# FDP Tutorial
 
 This repo contains an up to date fork of the material used for RSECon22 walkthrough titled: [*"A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows"*](https://virtual.oxfordabstracts.com/#/event/public/3101/submission/113). The walkthrough uses a docker container and Jupyter Labs (formally, a notebook) to run through an example usage of the [FAIR Data Pipeline](https://www.fairdatapipeline.org/). You can view the walkthrough presentation in the [Society of Research Software Engineering channel](https://www.youtube.com/watch?v=IZWpmIOhuz0).
 
@@ -8,9 +8,8 @@ It is meant to be used as a tutorial
 The only prerequisite is an installation of Docker, which is available free from [docker.com](https://www.docker.com/).
 
 ## Running the Docker Container
-The docker container is available on the GitHub Package Registry and can be pulled using the following command(s):
+The docker container is available on the GitHub Package Registry and can be pulled using the following command:
 
-### AMD64
 ```
 docker pull ghcr.io/fairdatapipeline/fdptutorial:latest
 ```
